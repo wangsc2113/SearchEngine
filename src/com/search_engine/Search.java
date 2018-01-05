@@ -48,11 +48,11 @@ public class Search {
 		JSONObject jsonObj=new JSONObject();
 		JSONArray jsonArray=new JSONArray();
 		
+		
 		//String keyWord = "记忆";
 		//String pattern = "hot";
 		
 		try {
-			long start = System.currentTimeMillis();
 			analyzer = new IKAnalyzer(true);
 			directory = FSDirectory.open(FileSystems.getDefault().getPath(INDEXDIR));
 			directoryReader = DirectoryReader.open(directory);
@@ -84,28 +84,25 @@ public class Search {
 	        int end = Math.min(begin + pagesize, hits.length);
 	        
 			for (int i = begin; i < end; i++) {
+				
+				
 				Document hitDoc = indexSearcher.doc(hits[i].doc);
 				//2.高亮显示、摘要生成
 				
 				String hlt = highlighter.getBestFragment(analyzer, "content", hitDoc.get("content"));
-				/*
-				System.out.println(hitDoc.get("id"));
-				System.out.println(hitDoc.get("url"));
-				System.out.println(hitDoc.get("name"));
-				System.out.println(hitDoc.get("time"));
-				System.out.println(hitDoc.get("up"));
-				System.out.println(hitDoc.get("down"));
-				System.out.println(hitDoc.get("hotdegree"));
-				*/
+				
 				System.out.println(hitDoc.get("content"));				
 				
 				jsonObj.put("url", hitDoc.get("url"));  
 				jsonObj.put("title", hitDoc.get("name"));  
 				jsonObj.put("contents", hlt);
 				jsonObj.put("add_time", hitDoc.get("time"));  
-				jsonArray.add(jsonObj);
+				jsonObj.put("up", hitDoc.get("up"));
+				jsonObj.put("down", hitDoc.get("down"));
+				
 				
 				//3.相似新闻查找
+				
 				int numDocs = indexReader.maxDoc();
 				MoreLikeThis moreLikeThis = new MoreLikeThis(indexReader);
 				
@@ -123,22 +120,28 @@ public class Search {
 				//System.out.println("similarquery = " + simlarquery);
 				//System.out.println();
 
-				TopDocs simlartopDocs = indexSearcher.search(simlarquery, 2);
+				TopDocs simlartopDocs = indexSearcher.search(simlarquery, 3);
 				if (simlartopDocs.totalHits == 0) {
 					//System.out.println("None like this");
 				}
 				else {
-					for (int j = 0; j < simlartopDocs.scoreDocs.length; j++) {
+					JSONObject similarObj = new JSONObject();
+					JSONArray similarArray = new JSONArray();
+					for (int j = 1; j < simlartopDocs.scoreDocs.length; j++) {
 						if (simlartopDocs.scoreDocs[j].doc != Integer.parseInt(hitDoc.get("id")) - 1) {
 							Document doc = indexReader.document(simlartopDocs.scoreDocs[j].doc);
-							//System.out.println(doc.getField("name").stringValue());
-							//System.out.println();
+							similarObj.put("url", doc.getField("url").stringValue());
+							similarObj.put("title", doc.getField("name").stringValue());
+							similarArray.add(similarObj);
 							}
 						}
+					jsonObj.put("similarNews", similarArray);
+					jsonArray.add(jsonObj);
 					}
+				
+				
 			}
-			long consume = System.currentTimeMillis() - start;
-			System.out.println("搜索耗时：" + consume/(float)1000 + "s");
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

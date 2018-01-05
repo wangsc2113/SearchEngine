@@ -61,8 +61,11 @@ public class getParameters extends HttpServlet {
 		JSONArray jsonArray = null;
 		System.out.println(keyword + " " + page + " " + pattern);
 		Search search = new Search();
+		long consume = 0;
 		try {
+			long start = System.currentTimeMillis();
 			jsonArray = search.searchByPattern(keyword, pattern);
+			consume = System.currentTimeMillis() - start;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -70,8 +73,8 @@ public class getParameters extends HttpServlet {
 		JSONObject result = new JSONObject();
 		try {
 			result.put("result", jsonArray);
-		    result.put("time", 0);
-		    result.put("pageCount", 0);
+		    result.put("time", consume/(float)1000);
+		    result.put("pageCount", page);
 		    System.out.println(result.toString());
 		    response.setContentType("text/html;charset=utf-8");
 		    response.getWriter().write(result.toString());

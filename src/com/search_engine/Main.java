@@ -5,6 +5,9 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+
+import com.sun.jndi.url.iiopname.iiopnameURLContextFactory;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -16,22 +19,21 @@ public class Main {
 		 //createIndex.create();
 		 System.out.println("--------------------------");
 		 
-		 try {  
-	            String key = "中国"; //查询关键字  
-	            key = URLEncoder.encode(key, "gb2312");  
-	            URL u = new URL("http://www.baidu.com.cn/s?wd=" + key + "&cl=3");  
-	            URLConnection conn = u.openConnection();  
-	            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "gb2312"));  
-	            String str = reader.readLine();  
-	            while (str != null) {  
-	                System.out.println(str);  
-	                str = reader.readLine();  
-	            }  
-	  
-	            reader.close();  
-	        } catch (Exception ex) {  
-	            ex.printStackTrace();  
-	        }  
+		 String query = "中国";
+		 String keyword = URLEncoder.encode(query, "utf-8");
+		 String urlStr = "http://api.bing.com/osjson.aspx?query=" + keyword;
+		 
+		 URL url = new URL(urlStr);
+		 URLConnection urlConnection = url.openConnection();
+		 urlConnection.connect();
+		 
+		 ArrayList arrayList = new ArrayList();
+		 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "utf-8"));		 
+		 String line = bufferedReader.readLine();
+		 System.out.println(line);
+		 String[] s = line.split(",");
+		 for (int i = 1 ; i < s.length; i++) {
+			 System.out.println(s[i]);
+		 }
 	}
-
 }

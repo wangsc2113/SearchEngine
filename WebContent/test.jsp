@@ -9,8 +9,8 @@
 <body>
 <%= request.getParameter("pattern") %>
 
-<form action = "getParameters" method = "post">
-<input name = "keyword" >
+<form action = "get_res.jsp" method = "post">
+<input name = "keyword" value = "中国">
 <input name = "pattern" value = "time">
 <input name = "page" value = "1">
 <input name = "button" value = "提交" type = "submit">
