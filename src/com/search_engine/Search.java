@@ -1,6 +1,12 @@
 package com.search_engine;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.nio.file.FileSystems;
+import java.util.ArrayList;
 
 import javax.swing.plaf.basic.BasicInternalFrameTitlePane.SystemMenuBar;
 
@@ -37,6 +43,24 @@ public class Search {
 	public static Result searchByPattern(String keyWord, String pattern) throws Exception{
 	//public static void main(String[] args) throws Exception{
 		Result result = new Result();
+		
+		String keyword = URLEncoder.encode(keyWord, "utf-8");
+		String urlStr = "http://api.bing.com/osjson.aspx?query=" + keyword;
+		 
+		URL url = new URL(urlStr);
+		URLConnection urlConnection = url.openConnection();
+		urlConnection.connect();
+		 
+		ArrayList arrayList = new ArrayList();
+		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "utf-8"));		 
+		String line = bufferedReader.readLine();
+		System.out.println(line);
+		String[] s = line.split(",");
+		for (int i = 2 ; i < s.length - 1 && i <= 5; i++) {
+			arrayList.add(s[i].replace("\"", ""));
+		}
+		result.setQueries(arrayList);
+		
 		Analyzer analyzer = null;
 		Directory directory = null;
 		DirectoryReader directoryReader = null;

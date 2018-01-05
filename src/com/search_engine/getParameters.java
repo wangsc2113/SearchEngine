@@ -72,6 +72,7 @@ public class getParameters extends HttpServlet {
 		System.out.println("____");
 		JSONObject result = new JSONObject();
 		try {
+			result.put("queries", rs.getQueries());
 			if (rs.getTotal() > 100) 
 				result.put("total", 100);
 			else 
