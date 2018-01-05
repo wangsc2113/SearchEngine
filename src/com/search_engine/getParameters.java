@@ -58,13 +58,13 @@ public class getParameters extends HttpServlet {
 		String keyword = request.getParameter("keyword");
 		String page = request.getParameter("page");
 		String pattern = request.getParameter("pattern");
-		JSONArray jsonArray = null;
+		Result rs = null;
 		System.out.println(keyword + " " + page + " " + pattern);
 		Search search = new Search();
 		long consume = 0;
 		try {
 			long start = System.currentTimeMillis();
-			jsonArray = search.searchByPattern(keyword, pattern);
+			rs = search.searchByPattern(keyword, pattern);
 			consume = System.currentTimeMillis() - start;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -72,7 +72,11 @@ public class getParameters extends HttpServlet {
 		System.out.println("____");
 		JSONObject result = new JSONObject();
 		try {
-			result.put("result", jsonArray);
+			if (rs.getTotal() > 100) 
+				result.put("total", 100);
+			else 
+				result.put("total", rs.getTotal());
+			result.put("result", rs.getJsonarray());
 		    result.put("time", consume/(float)1000);
 		    result.put("pageCount", page);
 		    System.out.println(result.toString());

@@ -34,8 +34,9 @@ import com.sun.org.apache.bcel.internal.generic.I2F;
 public class Search {
 	private static String INDEXDIR = "/Users/wangshicheng/Desktop/index";
 	
-	public static JSONArray searchByPattern(String keyWord, String pattern) throws Exception{
+	public static Result searchByPattern(String keyWord, String pattern) throws Exception{
 	//public static void main(String[] args) throws Exception{
+		Result result = new Result();
 		Analyzer analyzer = null;
 		Directory directory = null;
 		DirectoryReader directoryReader = null;
@@ -74,6 +75,8 @@ public class Search {
 				topDocs = indexSearcher.search(query, 100, new Sort(new SortedNumericSortField("hotdegree", SortField.Type.DOUBLE,true)));
 			}
 			System.out.println("匹配" + keyWord + "，总共查询到" + topDocs.totalHits + "个文档");
+			result.setTotal(topDocs.totalHits);
+			
 			ScoreDoc[] hits = topDocs.scoreDocs;
 			SimpleHTMLFormatter simpleHTMLFormatter = new SimpleHTMLFormatter(prefixHTML, suffixHTML);    
 	        Highlighter highlighter = new Highlighter(simpleHTMLFormatter,new QueryScorer(query));
@@ -117,9 +120,7 @@ public class Search {
 				Query simlarquery = moreLikeThis.like(hits[i].doc);
 				System.out.println(simlarquery);
 				System.out.println();
-				//System.out.println("similarquery = " + simlarquery);
-				//System.out.println();
-
+				 
 				TopDocs simlartopDocs = indexSearcher.search(simlarquery, 3);
 				if (simlartopDocs.totalHits == 0) {
 					//System.out.println("None like this");
@@ -138,8 +139,6 @@ public class Search {
 					jsonObj.put("similarNews", similarArray);
 					jsonArray.add(jsonObj);
 					}
-				
-				
 			}
 			
 		} catch (Exception e) {
@@ -153,6 +152,7 @@ public class Search {
 				e.printStackTrace();
 			}
 		}
-		return jsonArray;
+		result.setJsonarray(jsonArray);
+		return result;
 	}
 }
