@@ -38,8 +38,8 @@ import com.sun.xml.internal.ws.api.streaming.XMLStreamWriterFactory.Zephyr;
 import sun.util.logging.resources.logging;
 
 public class CreateIndex {
-	private static String INDEXDIR = "/Users/wangshicheng/Desktop/index";
-	
+	//private static String INDEXDIR = "/Users/wangshicheng/Desktop/index";
+	private static String INDEXDIR = "/Users/wangshicheng/Desktop/fullindex";
 	public static String numberIntercept(String number) {
 		return Pattern.compile("[^0-9]").matcher(number).replaceAll("");
 	}
@@ -58,7 +58,7 @@ public class CreateIndex {
 			indexWriter.deleteAll();
 			
 			Connection connection = dataBase.getCon();
-			String sql="select * from ir_news_2";
+			String sql="select * from ir_news";
 			PreparedStatement pstmt = connection.prepareStatement(sql);
 			ResultSet rs=pstmt.executeQuery();
 			
@@ -68,7 +68,10 @@ public class CreateIndex {
 			while(rs.next()){
 				Document document = new Document();
 				int id = rs.getInt("id");
+				System.out.println(id);
 				String time = rs.getString("time");
+				if (time.equals(""))
+					continue;
 				int up = 0;
 				int down = 0;
 				

@@ -23,7 +23,7 @@ public class comment {
 	public static HashMap commentMap() throws Exception {
 	//public static void main(String[] args) {
 		
-		File file = new File("/Users/wangshicheng/Desktop/comments.txt");
+		File file = new File("/Users/wangshicheng/Desktop/fullcomments.txt");
 		BufferedReader bufferedReader = null;
 		HashMap hashmap = new HashMap();
 		

@@ -95,7 +95,7 @@ public class getParameters extends HttpServlet {
 		try {
 			builder = new URIBuilder(url);
 //			URLEncoder.encode("中国", "UTF-8")
-			builder.setParameter("keyword", "中国").setParameter("page", "1").setParameter("pattern", "time");
+			builder.setParameter("keyword", "记忆").setParameter("page", "1").setParameter("pattern", "time");
 		} catch (URISyntaxException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();

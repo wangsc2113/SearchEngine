@@ -38,8 +38,8 @@ import org.wltea.analyzer.lucene.IKAnalyzer;
 import com.sun.org.apache.bcel.internal.generic.I2F;
 
 public class Search {
-	private static String INDEXDIR = "/Users/wangshicheng/Desktop/index";
-	
+	private static String INDEXDIR = "/Users/wangshicheng/Desktop/fullindex";
+	//private static String INDEXDIR = "/Users/wangshicheng/Desktop/index";
 	public static Result searchByPattern(String keyWord, String pattern) throws Exception{
 	//public static void main(String[] args) throws Exception{
 		Result result = new Result();
