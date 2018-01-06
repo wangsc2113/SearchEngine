@@ -64,7 +64,7 @@ public class getParameters extends HttpServlet {
 		long consume = 0;
 		try {
 			long start = System.currentTimeMillis();
-			rs = search.searchByPattern(keyword, pattern);
+			rs = search.searchByPattern(keyword, page, pattern);
 			consume = System.currentTimeMillis() - start;
 		} catch (Exception e) {
 			e.printStackTrace();

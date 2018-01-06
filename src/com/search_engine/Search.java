@@ -40,7 +40,7 @@ import com.sun.org.apache.bcel.internal.generic.I2F;
 public class Search {
 	private static String INDEXDIR = "/Users/wangshicheng/Desktop/fullindex";
 	//private static String INDEXDIR = "/Users/wangshicheng/Desktop/index";
-	public static Result searchByPattern(String keyWord, String pattern) throws Exception{
+	public static Result searchByPattern(String keyWord, String page, String pattern) throws Exception{
 	//public static void main(String[] args) throws Exception{
 		Result result = new Result();
 		
@@ -106,7 +106,7 @@ public class Search {
 	        Highlighter highlighter = new Highlighter(simpleHTMLFormatter,new QueryScorer(query));
 	        
 	        int pagesize = 10;
-	        int curpage = 1;
+	        int curpage = Integer.parseInt(page);
 	        int begin = (curpage - 1) * pagesize;
 	        int end = Math.min(begin + pagesize, hits.length);
 	        
